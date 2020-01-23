@@ -1,0 +1,40 @@
+
+FROM ubuntu:bionic
+
+ENV str0=     #Head-IP
+ENV str1=     #Node1-IP
+ENV str2=     #Node2-IP
+ENV str3=     #Node3-IP
+
+
+ENV LANGUAGE=en_US.UTF-8
+
+#set timezone
+ENV TZ=Europe/Berlin
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+#set locales
+RUN apt-get update && apt-get install -y locales
+RUN locale-gen ${LANGUAGE}
+
+#activate bash-completion
+RUN apt-get -y upgrade && apt-get -y install nano software-properties-common sudo wget bash-completion
+RUN rm /etc/apt/apt.conf.d/docker-clean
+RUN cd /etc/ && \
+echo ''  >> bash.bashrc && \
+echo 'if ! shopt -oq posix; then' >> bash.bashrc && \
+echo '  if [ -f /usr/share/bash-completion/bash_completion ]; then' >> bash.bashrc && \
+echo '    . /usr/share/bash-completion/bash_completion' >> bash.bashrc && \
+echo '  elif [ -f /etc/bash_completion ]; then' >> bash.bashrc && \
+echo '    . /etc/bash_completion' >> bash.bashrc && \
+echo '  fi' >> bash.bashrc && \
+echo 'fi' >> bash.bashrc
+
+
+
+
+
+
+ENTRYPOINT  /root/entrypoint.sh & /bin/bash
