@@ -20,7 +20,7 @@ RUN apt-get update && apt-get install -y locales
 RUN locale-gen ${LANGUAGE}
 
 #activate bash-completion
-RUN apt-get -y upgrade && apt-get -y install nano software-properties-common sudo wget bash-completion
+RUN apt-get -y upgrade && apt-get -y install nano software-properties-common sudo wget bash-completion ssh
 RUN rm /etc/apt/apt.conf.d/docker-clean
 RUN cd /etc/ && \
 echo ''  >> bash.bashrc && \
