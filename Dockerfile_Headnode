@@ -86,7 +86,6 @@ RUN x11vnc -storepasswd ${XPW} /root/passwd.pass
 ENV XPW=
 
 #OPENFOAM
-RUN apt-get -y install gnupg
 RUN sh -c "wget -O - https://dl.openfoam.org/gpg.key | apt-key add -"
 RUN add-apt-repository http://dl.openfoam.org/ubuntu && apt-get update
 RUN apt-get -y install openfoam7
