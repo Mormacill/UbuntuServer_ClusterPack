@@ -1,13 +1,5 @@
 FROM ubuntu:20.04
 
-
-ENV str0=
-ENV str1=
-ENV str2=
-ENV str3=
-
-
-
 # XPT: x11vnc port to use
 # XPW: x11vnc VNC password
 # LANGUAGE: set locales
