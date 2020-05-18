@@ -1,10 +1,10 @@
 FROM ubuntu:20.04
 
 
-ENV str0=     #Head-IP
-ENV str1=     #Node1-IP
-ENV str2=     #Node2-IP
-ENV str3=     #Node3-IP
+ENV str0=
+ENV str1=
+ENV str2=
+ENV str3=
 
 
 
@@ -103,8 +103,9 @@ RUN apt-get -y install openfoam7
 
 RUN apt-get -y install ssh
 
-EXPOSE ${XPT}/tcp	#VNC-Port
-EXPOSE 22/tcp		#default-SSH-Port
-
+#VNC-Port
+EXPOSE ${XPT}/tcp
+#default-SSH-Port
+EXPOSE 22/tcp
 
 ENTRYPOINT  /root/entrypoint.sh & /bin/bash & service ssh start
