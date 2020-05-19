@@ -10,6 +10,10 @@ ENV XPW=123456
 ENV LANGUAGE=en_US.UTF-8
 ENV LANGU=en
 
+ENV ROOTPW=123
+ENV USERNAME=user
+ENV USERPW=123
+
 
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y apt-utils && apt-get install -y locales
@@ -53,6 +57,7 @@ RUN cd /root/ && \
 echo 'rm /tmp/.X0-lock' > entrypoint.sh && \
 echo 'export DISPLAY=:0' >> entrypoint.sh && \
 echo 'service dbus start' >> entrypoint.sh && \
+echo 'service ssh start' >> entrypoint.sh && \
 echo 'X &' >> entrypoint.sh && \
 echo 'sleep 3' >> entrypoint.sh && \
 echo 'xauth generate :0 . trusted' >> entrypoint.sh && \
@@ -89,14 +94,23 @@ ENV XPW=
 RUN sh -c "wget -O - https://dl.openfoam.org/gpg.key | apt-key add -"
 RUN add-apt-repository http://dl.openfoam.org/ubuntu && apt-get update
 RUN apt-get -y install openfoam7
+RUN echo '. /opt/openfoam7/etc/bashrc' >> /root/.bashrc
 
 #SSH
-
 RUN apt-get -y install ssh
+
+#ADDUSER
+RUN echo 'root:${ROOTPW}' | chpasswd
+RUN adduser ${USERNAME} --gecos "" --disabled-password && usermod -aG sudo ${USERNAME}
+
+RUN echo "Set disable_coredump false" >> /etc/sudo.conf
+RUN echo "${USERNAME}:${USERPW}" | sudo chpasswd 
+RUN echo '. /opt/openfoam7/etc/bashrc' >> /home/${USERNAME}/.bashrc
+
 
 #VNC-Port
 EXPOSE ${XPT}/tcp
 #default-SSH-Port
 EXPOSE 22/tcp
 
-ENTRYPOINT  /root/entrypoint.sh & /bin/bash & service ssh start
+ENTRYPOINT  /root/entrypoint.sh & /bin/bash
