@@ -14,6 +14,19 @@ ENV ROOTPW=123
 ENV USERNAME=user
 ENV USERPW=123
 
+ENV MASTERHOSTNAME=master
+ENV MASTERIP=10.0.0.100
+
+ENV NODE1HOSTNAME=node1
+ENV NODE1IP=10.0.0.101
+
+ENV NODE2HOSTNAME=node2
+ENV NODE2IP=10.0.0.102
+
+ENV NODE3HOSTNAME=node3
+ENV NODE3IP=10.0.0.103
+
+#\* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y apt-utils && apt-get install -y locales
@@ -53,20 +66,6 @@ echo '    Modes "1920x1080_60.00"' >> xorg.conf && \
 echo '  EndSubSection' >> xorg.conf && \
 echo 'EndSection' >> xorg.conf
 
-RUN cd /root/ && \
-echo 'rm /tmp/.X0-lock' > entrypoint.sh && \
-echo 'export DISPLAY=:0' >> entrypoint.sh && \
-echo 'service dbus start' >> entrypoint.sh && \
-echo 'service ssh start' >> entrypoint.sh && \
-echo 'X &' >> entrypoint.sh && \
-echo 'sleep 3' >> entrypoint.sh && \
-echo 'xauth generate :0 . trusted' >> entrypoint.sh && \
-echo 'sleep 5' >> entrypoint.sh && \
-echo 'startxfce4 &' >> entrypoint.sh && \
-echo 'sleep 10' >> entrypoint.sh && \
-echo 'x11vnc -auth guess -forever -loop -noxdamage -repeat -rfbauth /root/passwd.pass -rfbport ${XPT} -shared &' >> entrypoint.sh && \
-chmod +x entrypoint.sh
-
 RUN apt-get -y purge gnome-terminal xterm && apt-get -y install gedit tilix firefox sudo wget bash-completion && apt-get -y autoremove
 
 RUN apt-get -y install language-selector-gnome && apt-get -y install $(check-language-support -l ${LANGU}) && xdg-user-dirs-update --force
@@ -90,16 +89,16 @@ RUN x11vnc -storepasswd ${XPW} /root/passwd.pass
 
 ENV XPW=
 
-#OPENFOAM
+#* * * OPENFOAM * * *
 RUN sh -c "wget -O - https://dl.openfoam.org/gpg.key | apt-key add -"
 RUN add-apt-repository http://dl.openfoam.org/ubuntu && apt-get update
 RUN apt-get -y install openfoam7
 RUN echo '. /opt/openfoam7/etc/bashrc' >> /root/.bashrc
 
-#SSH
+#* * * SSH * * *
 RUN apt-get -y install ssh
 
-#ADDUSER
+#* * * ADDUSER * * *
 RUN echo 'root:${ROOTPW}' | chpasswd
 RUN adduser ${USERNAME} --gecos "" --disabled-password && usermod -aG sudo ${USERNAME}
 
@@ -107,6 +106,28 @@ RUN echo "Set disable_coredump false" >> /etc/sudo.conf
 RUN echo "${USERNAME}:${USERPW}" | sudo chpasswd 
 RUN echo '. /opt/openfoam7/etc/bashrc' >> /home/${USERNAME}/.bashrc
 
+#* * * EDIT /etc/HOSTS * * *
+RUN cd /etc/ && rm hosts
+RUN echo '127.0.0.1 localhost' > /etc/hosts && \
+echo '${MASTERIP} ${MASTERHOSTNAME}' >> /etc/hosts && \
+echo '${NODE1IP} ${NODE1HOSTNAME}' >> /etc/hosts && \
+echo '${NODE2IP} ${NODE2HOSTNAME}' >> /etc/hosts && \
+echo '${NODE3IP} ${NODE3HOSTNAME}' >> /etc/hosts && \
+
+#* * * ENTRYPOINT * * *
+RUN cd /root/ && \
+echo 'rm /tmp/.X0-lock' > entrypoint.sh && \
+echo 'export DISPLAY=:0' >> entrypoint.sh && \
+echo 'service dbus start' >> entrypoint.sh && \
+echo 'service ssh start' >> entrypoint.sh && \
+echo 'X &' >> entrypoint.sh && \
+echo 'sleep 3' >> entrypoint.sh && \
+echo 'xauth generate :0 . trusted' >> entrypoint.sh && \
+echo 'sleep 5' >> entrypoint.sh && \
+echo 'startxfce4 &' >> entrypoint.sh && \
+echo 'sleep 10' >> entrypoint.sh && \
+echo 'x11vnc -auth guess -forever -loop -noxdamage -repeat -rfbauth /root/passwd.pass -rfbport ${XPT} -shared &' >> entrypoint.sh && \
+chmod +x entrypoint.sh
 
 #VNC-Port
 EXPOSE ${XPT}/tcp
