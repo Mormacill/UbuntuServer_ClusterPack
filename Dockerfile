@@ -15,16 +15,16 @@ ENV USERNAME=user
 ENV USERPW=123
 
 ENV MASTERHOSTNAME=master
-ENV MASTERIP=10.0.0.100
+ENV MASTERIP=10.0.1.100
 
 ENV NODE1HOSTNAME=node1
-ENV NODE1IP=10.0.0.101
+ENV NODE1IP=10.0.1.101
 
 ENV NODE2HOSTNAME=node2
-ENV NODE2IP=10.0.0.102
+ENV NODE2IP=10.0.1.102
 
 ENV NODE3HOSTNAME=node3
-ENV NODE3IP=10.0.0.103
+ENV NODE3IP=10.0.1.103
 
 #\* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -105,18 +105,18 @@ RUN adduser ${USERNAME} --gecos "" --disabled-password && usermod -aG sudo ${USE
 RUN echo "Set disable_coredump false" >> /etc/sudo.conf
 RUN echo "${USERNAME}:${USERPW}" | sudo chpasswd 
 RUN echo '. /opt/openfoam7/etc/bashrc' >> /home/${USERNAME}/.bashrc
+ENV USERPW=
 
-#* * * EDIT /etc/HOSTS * * *
-RUN cd /etc/ && rm hosts
-RUN echo '127.0.0.1 localhost' > /etc/hosts && \
-echo '${MASTERIP} ${MASTERHOSTNAME}' >> /etc/hosts && \
-echo '${NODE1IP} ${NODE1HOSTNAME}' >> /etc/hosts && \
-echo '${NODE2IP} ${NODE2HOSTNAME}' >> /etc/hosts && \
-echo '${NODE3IP} ${NODE3HOSTNAME}' >> /etc/hosts && \
+#* * * EDIT /etc/hosts * * *
+RUN echo '${MASTERIP} ${MASTERHOSTNAME}' > /etc/hosts_b && \
+echo '${NODE1IP} ${NODE1HOSTNAME}' >> /etc/hosts_b && \
+echo '${NODE2IP} ${NODE2HOSTNAME}' >> /etc/hosts_b && \
+echo '${NODE3IP} ${NODE3HOSTNAME}' >> /etc/hosts_b
 
 #* * * ENTRYPOINT * * *
 RUN cd /root/ && \
 echo 'rm /tmp/.X0-lock' > entrypoint.sh && \
+echo 'cat /etc/hosts_b >> /etc/hosts' >> entrypoint.sh && \
 echo 'export DISPLAY=:0' >> entrypoint.sh && \
 echo 'service dbus start' >> entrypoint.sh && \
 echo 'service ssh start' >> entrypoint.sh && \
