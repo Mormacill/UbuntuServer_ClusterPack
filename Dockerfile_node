@@ -114,7 +114,7 @@ echo '${NODE2IP} ${NODE2HOSTNAME}' >> /etc/hosts_b && \
 echo '${NODE3IP} ${NODE3HOSTNAME}' >> /etc/hosts_b
 
 #* * * nfs-kernel-server
-RUN apt-get install nfs-common
+RUN apt-get install -y nfs-common
 RUN echo '${MASTERHOSTNAME}:/home/${USERNAME} /home/${USERNAME} nfs' >> /etc/fstab
 
 #* * * ENTRYPOINT * * *
