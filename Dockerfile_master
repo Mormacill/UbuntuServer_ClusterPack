@@ -11,7 +11,7 @@ ENV LANGUAGE=en_US.UTF-8
 ENV LANGU=en
 
 ENV ROOTPW=123
-ENV USERNAME=user
+ENV USERNAME=mpiuser
 ENV USERPW=123
 
 ENV MASTERHOSTNAME=master
@@ -100,7 +100,7 @@ RUN apt-get -y install ssh
 
 #* * * ADDUSER * * *
 RUN echo 'root:${ROOTPW}' | chpasswd
-RUN adduser ${USERNAME} --gecos "" --disabled-password && usermod -aG sudo ${USERNAME}
+RUN adduser ${USERNAME} --gecos "" --disabled-password --uid 999 && usermod -aG sudo ${USERNAME}
 
 RUN echo "Set disable_coredump false" >> /etc/sudo.conf
 RUN echo "${USERNAME}:${USERPW}" | sudo chpasswd 
