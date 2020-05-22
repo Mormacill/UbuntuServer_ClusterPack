@@ -113,7 +113,7 @@ echo '${NODE1IP} ${NODE1HOSTNAME}' >> /etc/hosts_b && \
 echo '${NODE2IP} ${NODE2HOSTNAME}' >> /etc/hosts_b && \
 echo '${NODE3IP} ${NODE3HOSTNAME}' >> /etc/hosts_b
 
-#* * * nfs-kernel-server
+#* * * nfs-kernel-server * * *
 RUN apt-get install -y nfs-kernel-server
 RUN echo '/home/${USERNAME} *(rw,sync,no_subtree_check)' >> /etc/exports
 
