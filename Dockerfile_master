@@ -116,10 +116,9 @@ RUN echo '/home/${USERNAME} *(rw,sync,no_subtree_check)' >> /etc/exports
 
 #* * * SSH * * *
 RUN apt-get -y install ssh
-RUN service ssh start
 USER ${USERNAME}
 RUN ssh-keygen -q -N '' -f /home/${USERNAME}/.ssh/id_rsa
-RUN ssh-copy-id localhost
+RUN sudo service ssh start && ssh-copy-id localhost
 USER root
 
 #* * * ENTRYPOINT * * *
