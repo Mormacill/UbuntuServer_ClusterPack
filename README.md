@@ -1,10 +1,10 @@
 # UbuntuServer_ClusterPack
 
-1. Master:    docker swarm init
-2. Master:    docker network create -d overlay --attachable ${my-attachable-overlay}
-3. Master:    docker run -it -p 33:22/tcp -p 5900:5900/tcp --network=${my-attachable-overlay} --hostname ${MASTERHOSTNAME} --name ${containername}
+1. Master:    `docker swarm init`
+2. Master:    `docker network create -d overlay --attachable ${my-attachable-overlay}`
+3. Master:    `docker run -it -p 33:22/tcp -p 5900:5900/tcp --network=${my-attachable-overlay} --hostname ${MASTERHOSTNAME} --name ${containername}`
 4. Nodes:     join swarm by link
-5. Nodes:     docker run -it -p 5900:5900/tcp --network=${my-attachable-overlay} --hostname ${NODEHOSTNAME} --name ${containername}
+5. Nodes:     `docker run -it -p 5900:5900/tcp --network=${my-attachable-overlay} --hostname ${NODEHOSTNAME} --name ${containername}`
 
 
 
