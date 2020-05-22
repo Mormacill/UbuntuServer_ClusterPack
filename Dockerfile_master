@@ -95,9 +95,6 @@ RUN add-apt-repository http://dl.openfoam.org/ubuntu && apt-get update
 RUN apt-get -y install openfoam7
 RUN echo '. /opt/openfoam7/etc/bashrc' >> /root/.bashrc
 
-#* * * SSH * * *
-RUN apt-get -y install ssh
-
 #* * * ADDUSER * * *
 RUN echo 'root:${ROOTPW}' | chpasswd
 RUN adduser ${USERNAME} --gecos "" --disabled-password --uid 999 && usermod -aG sudo ${USERNAME}
@@ -116,6 +113,13 @@ echo '${NODE3IP} ${NODE3HOSTNAME}' >> /etc/hosts_b
 #* * * nfs-kernel-server * * *
 RUN apt-get install -y nfs-kernel-server
 RUN echo '/home/${USERNAME} *(rw,sync,no_subtree_check)' >> /etc/exports
+
+#* * * SSH * * *
+RUN apt-get -y install ssh
+USER ${USERNAME}
+RUN ssh-keygen -q -N ''
+RUN ssh-copy-id localhost
+USER root
 
 #* * * ENTRYPOINT * * *
 RUN cd /root/ && \
