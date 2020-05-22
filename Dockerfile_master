@@ -100,9 +100,8 @@ RUN echo 'root:${ROOTPW}' | chpasswd
 RUN adduser ${USERNAME} --gecos "" --disabled-password --uid 999 && usermod -aG sudo ${USERNAME}
 
 RUN echo "Set disable_coredump false" >> /etc/sudo.conf
-RUN echo "${USERNAME}:${USERPW}" | sudo chpasswd 
+RUN echo "${USERNAME}:${USERPW}" | sudo chpasswd
 RUN echo '. /opt/openfoam7/etc/bashrc' >> /home/${USERNAME}/.bashrc
-ENV USERPW=
 
 #* * * EDIT /etc/hosts * * *
 RUN echo '${MASTERIP} ${MASTERHOSTNAME}' > /etc/hosts_b && \
@@ -115,10 +114,11 @@ RUN apt-get install -y nfs-kernel-server
 RUN echo '/home/${USERNAME} *(rw,sync,no_subtree_check)' >> /etc/exports
 
 #* * * SSH * * *
-RUN apt-get -y install ssh
+RUN apt-get -y install ssh sshpass
 USER ${USERNAME}
 RUN ssh-keygen -q -N '' -f /home/${USERNAME}/.ssh/id_rsa
-RUN sudo service ssh start && ssh-copy-id localhost
+RUN echo 'StrictHostKeyChecking no' > /home/${USERNAME}/.ssh/config && echo 'UserKnownHostsFile=/dev/null' >> /home/${USERNAME}/.ssh/config
+RUN echo ${ROOTPW} | sudo -S service ssh start && sshpass -p ${USERPW} ssh-copy-id localhost
 USER root
 
 #* * * ENTRYPOINT * * *
@@ -137,6 +137,8 @@ echo 'startxfce4 &' >> entrypoint.sh && \
 echo 'sleep 10' >> entrypoint.sh && \
 echo 'x11vnc -auth guess -forever -loop -noxdamage -repeat -rfbauth /root/passwd.pass -rfbport ${XPT} -shared &' >> entrypoint.sh && \
 chmod +x entrypoint.sh
+
+ENV USERPW=
 
 #VNC-Port
 EXPOSE ${XPT}/tcp
