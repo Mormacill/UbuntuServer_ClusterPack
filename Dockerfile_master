@@ -66,7 +66,7 @@ echo '    Modes "1920x1080_60.00"' >> xorg.conf && \
 echo '  EndSubSection' >> xorg.conf && \
 echo 'EndSection' >> xorg.conf
 
-RUN apt-get -y purge gnome-terminal xterm && apt-get -y install gedit tilix firefox sudo wget bash-completion && apt-get -y autoremove
+RUN apt-get -y purge gnome-terminal xterm && apt-get -y install gedit tilix firefox sudo wget bash-completion iputils-ping net-tools && apt-get -y autoremove
 
 RUN apt-get -y install language-selector-gnome && apt-get -y install $(check-language-support -l ${LANGU}) && xdg-user-dirs-update --force
 
@@ -102,12 +102,6 @@ RUN adduser ${USERNAME} --gecos "" --disabled-password --uid 999 && usermod -aG 
 RUN echo "Set disable_coredump false" >> /etc/sudo.conf
 RUN echo "${USERNAME}:${USERPW}" | sudo chpasswd
 RUN echo '. /opt/openfoam7/etc/bashrc' >> /home/${USERNAME}/.bashrc
-
-#* * * EDIT /etc/hosts * * *
-RUN echo '${MASTERIP} ${MASTERHOSTNAME}' > /etc/hosts_b && \
-echo '${NODE1IP} ${NODE1HOSTNAME}' >> /etc/hosts_b && \
-echo '${NODE2IP} ${NODE2HOSTNAME}' >> /etc/hosts_b && \
-echo '${NODE3IP} ${NODE3HOSTNAME}' >> /etc/hosts_b
 
 #* * * nfs-kernel-server * * *
 RUN apt-get install -y nfs-kernel-server
