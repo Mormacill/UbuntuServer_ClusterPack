@@ -1,11 +1,11 @@
 # UbuntuServer_ClusterPack
 
-1. Master:    `docker swarm init`
-2. Master:    `docker network create -d overlay --attachable ${my-attachable-overlay}` <br>
-2a. Master:   `modprobe nfs && modprobe nfsd`
-3. Master:    `docker run -it -p 33:22/tcp -p 5900:5900/tcp --network=${my-attachable-overlay} --ip=... --add-host=hostname:ipaddress --privileged --hostname ${MASTERHOSTNAME} --name ${containername}`
-4. Nodes:     `docker swarm join ... `(link by swarm init)
-5. Nodes:     `docker run -it -p 5900:5900/tcp --network=${my-attachable-overlay} --ip=... --add-host=hostname:ipaddress --privileged --hostname ${NODEHOSTNAME} --name ${containername}`
+1. Master:      `docker swarm init`
+2. Master:      `docker network create -d overlay --attachable ${my-attachable-overlay}`
+3. Master-Host: `modprobe nfs && modprobe nfsd`
+4. Master:      `docker run -it -p 33:22/tcp -p 5900:5900/tcp --network=${my-attachable-overlay} --ip=... --add-host=hostname:ipaddress --privileged --hostname ${MASTERHOSTNAME} --name ${containername}`
+5. Nodes:       `docker swarm join ... `(link by swarm init)
+6. Nodes:       `docker run -it -p 5900:5900/tcp --network=${my-attachable-overlay} --ip=... --add-host=hostname:ipaddress --privileged --hostname ${NODEHOSTNAME} --name ${containername}`
 
 
 
