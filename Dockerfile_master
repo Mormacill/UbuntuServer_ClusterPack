@@ -14,6 +14,8 @@ ENV ROOTPW=123
 ENV USERNAME=mpiuser
 ENV USERPW=123
 
+ENV NFSHOSTNAME=nfs-server
+
 ENV MASTERHOSTNAME=master
 ENV MASTERIP=10.0.1.100
 
@@ -103,9 +105,9 @@ RUN echo "Set disable_coredump false" >> /etc/sudo.conf
 RUN echo "${USERNAME}:${USERPW}" | sudo chpasswd
 RUN echo '. /opt/openfoam7/etc/bashrc' >> /home/${USERNAME}/.bashrc
 
-#* * * nfs-kernel-server * * *
-RUN apt-get install -y nfs-kernel-server
-RUN echo '/home/${USERNAME} *(rw,sync,no_subtree_check)' >> /etc/exports
+#* * * nfs-common * * *
+RUN apt-get install -y nfs-common
+RUN echo '${NFSHOSTNAME}:/home/${USERNAME} /home/${USERNAME} nfs' >> /etc/fstab
 
 #* * * SSH * * *
 RUN apt-get -y install ssh sshpass
