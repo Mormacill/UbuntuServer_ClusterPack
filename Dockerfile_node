@@ -14,6 +14,8 @@ ENV ROOTPW=123
 ENV USERNAME=mpiuser
 ENV USERPW=123
 
+ENV NFSHOSTNAME=nfs-server
+
 ENV MASTERHOSTNAME=master
 ENV MASTERIP=10.0.1.100
 
@@ -106,7 +108,7 @@ ENV USERPW=
 
 #* * * nfs-common * * *
 RUN apt-get install -y nfs-common
-RUN echo '${MASTERHOSTNAME}:/home/${USERNAME} /home/${USERNAME} nfs' >> /etc/fstab
+RUN echo '${NFSHOSTNAME}:/home/${USERNAME} /home/${USERNAME} nfs' >> /etc/fstab
 
 #* * * SSH * * *
 RUN apt-get -y install ssh
