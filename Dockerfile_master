@@ -122,7 +122,7 @@ RUN cd /root/ && \
 echo 'rm /tmp/.X0-lock' > entrypoint.sh && \
 echo 'cat /etc/hosts_b >> /etc/hosts' >> entrypoint.sh && \
 echo 'export DISPLAY=:0' >> entrypoint.sh && \
-echo 'service nfs-kernel-server start' >> entrypoint.sh && \
+echo 'service nfs-common start' >> entrypoint.sh && \
 echo 'service dbus start' >> entrypoint.sh && \
 echo 'service ssh start' >> entrypoint.sh && \
 echo 'X &' >> entrypoint.sh && \
