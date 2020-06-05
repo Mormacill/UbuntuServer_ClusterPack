@@ -108,7 +108,6 @@ ENV USERPW=
 
 #* * * nfs-common * * *
 RUN apt-get install -y nfs-common
-RUN echo '${NFSHOSTNAME}:/home/${USERNAME} /home/${USERNAME} nfs' >> /etc/fstab
 
 #* * * SSH * * *
 RUN apt-get -y install ssh
@@ -120,7 +119,7 @@ echo 'cat /etc/hosts_b >> /etc/hosts' >> entrypoint.sh && \
 echo 'export DISPLAY=:0' >> entrypoint.sh && \
 echo 'service rpcbind restart' >> entrypoint.sh && \
 echo 'service nfs-common start' >> entrypoint.sh && \
-echo 'mount -a' >> entrypoint.sh && \
+echo 'mount ${NFSHOSTNAME}:/home/${USERNAME} /home/${USERNAME}' >> entrypoint.sh && \
 echo 'service dbus start' >> entrypoint.sh && \
 echo 'service ssh start' >> entrypoint.sh && \
 echo 'X &' >> entrypoint.sh && \
