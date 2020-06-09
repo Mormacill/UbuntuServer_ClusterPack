@@ -15,7 +15,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Test dependency script Master
-      run: docker run -id --name skripttest ubuntu:20.04 && docker cp dependencies_MasterHost.sh skripttest:/root && docker exec -it skripttest dependencies_MasterHost.sh
+      run: docker run -itd --name skripttest ubuntu:20.04 && docker cp dependencies_MasterHost.sh skripttest:/root && docker exec -i skripttest dependencies_MasterHost.sh
     - name: Test dependency script node
       run: ./dependencies_NodesHost.sh
 
