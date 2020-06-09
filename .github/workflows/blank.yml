@@ -20,7 +20,7 @@ jobs:
       run: docker build . --file Dockerfile_node --tag my-image-name:$(date +%s)
       
     - name: Test dependency script Master
-      run: ./dependencies_MasterHost.sh
+      run: sudo ./dependencies_MasterHost.sh
     - name: Test dependency script node
-      run: ./dependencies_NodesHost.sh
+      run: sudo ./dependencies_NodesHost.sh
       
