@@ -14,11 +14,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Test dependency script Master
-      run: docker run -itd --name skripttest ubuntu:20.04 && docker cp dependencies_MasterHost.sh skripttest:/root/dependencies_MasterHost.sh && docker exec -i skripttest "chmod +x /root/dependencies_MasterHost.sh" && docker exec -i skripttest "/root/dependencies_MasterHost.sh"
-    - name: Test dependency script node
-      run: ./dependencies_NodesHost.sh
-
     - name: Build Docker container Master
       run: docker build . --file Dockerfile_master --tag my-image-name:$(date +%s)
     - name: Build Docker container node
