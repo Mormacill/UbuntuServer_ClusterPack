@@ -116,9 +116,6 @@ RUN apt-get -y install ssh
 COPY .scripts/entrypoint.sh /root/
 RUN chmod +x /root/entrypoint.sh
 
-COPY .scripts/mpirun_startscript.sh /home/${USERNAME}
-RUN chmod +x /home/${USERNAME}/mpirun_startscript.sh
-
 #VNC-Port
 EXPOSE ${XPT}/tcp
 #default-SSH-Port
