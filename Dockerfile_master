@@ -120,8 +120,10 @@ USER root
 COPY .scripts/entrypoint.sh /root/
 RUN chmod +x /root/entrypoint.sh
 
-COPY .scripts/mpirun_startscript.sh /home/${USERNAME}
-RUN chmod +x /home/${USERNAME}/mpirun_startscript.sh
+#* * * MPIRUN SCRIPT * * *
+RUN mkdir /home/${USERNAME}/TEMPLATES
+COPY .scripts/mpirun_startscript.sh /home/${USERNAME}/TEMPLATES
+RUN chmod +x /home/${USERNAME}/TEMPLATES/mpirun_startscript.sh
 
 ENV USERPW=
 
