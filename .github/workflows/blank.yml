@@ -15,6 +15,6 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Build Docker container Master
-      run: docker build . --file Dockerfile_master --tag my-image-name:$(date +%s)
+      run: docker build . --file Dockerfile_master --tag UbuntuOFClusterMaster:20.04
     - name: Build Docker container node
-      run: docker build . --file Dockerfile_node --tag my-image-name:$(date +%s)
+      run: docker build . --file Dockerfile_node --tag UbuntuOFClusterNode:20.04
