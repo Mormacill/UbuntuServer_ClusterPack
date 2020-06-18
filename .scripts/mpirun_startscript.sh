@@ -5,9 +5,12 @@ echo ""
 #echo "Anzahl der Prozesse"
 #read NUMBEROFCORES
 #echo ""
-echo "Welcher Solver soll verwendet werden? (e.g simpleFoam, pimpleFoam...)"
-read EXECUTABLE
-echo ""
+#echo "Welcher Solver soll verwendet werden? (e.g simpleFoam, pimpleFoam...)"
+#read EXECUTABLE
+#echo ""
+
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+EXECUTABLE=$(getApplication)
 
 NUMBEROFCORES=$(grep -w "numberOfSubdomains" system/decomposeParDict | grep -o '[0-9]*')
 
